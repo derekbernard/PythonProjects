@@ -1,0 +1,2 @@
+py -m pip install selenium
+py -3 tinderBot.py

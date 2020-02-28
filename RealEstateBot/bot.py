@@ -17,24 +17,11 @@ class Bot():
             sleep(1)
             pageNumber= pageNumber + 1
             print(pageNumber)
-            self.driver.find_element_by_xpath("/html/body/main/div[2]/div/div/div[3]/div/nav/div[2]/a").click()
+            self.driver.find_element_by_xpath("/html/body/main/div[2]/div/div/div[3]/div/nav/div[2]/a").click() # next page button
 
             
-
-        while True:
-            print("searching for houses")
-            sleep(1)
-            try:
-                self.driver.find_elements_by_class_name("search-results-listings-list__item-image-link")[0].click()
-            except Exception:
-                try:
-                    self.driver.find_element_by_xpath("/html/body/main/div[2]/div/div/div[2]/div/div/div/div[1]").click()   
-                except Exception:
-                        exit(0)
-
     def iterateTroughList(self):
-        listOfHouse =  self.driver.find_elements_by_class_name("search-results-listings-list__item-image-link")
-        
+        listOfHouse =  self.driver.find_elements_by_class_name("search-results-listings-list__item-image-link") # list of house div
         for i in range(len(listOfHouse)):
             listOfHouse =  self.driver.find_elements_by_class_name("search-results-listings-list__item-image-link")
             while True:
@@ -54,14 +41,13 @@ class Bot():
                     print("couldnt clicked house listing")
                     sleep(3)
                     try:
-                        self.driver.find_element_by_xpath("/html/body/main/div[2]/div/div/div[2]/div/div/div/div[1]").click()
+                        self.driver.find_element_by_xpath("/html/body/main/div[2]/div/div/div[2]/div/div/div/div[1]").click()   # pop up close button
                         print("popup closed, continuing")
                         sleep(2)
                     except:
                         print("unexcepted error, exiting")
                         print(i)
                         break
-
             print("done")
             self.driver.back()
             sleep(3)
@@ -79,7 +65,7 @@ class Bot():
          
     def executeAnalysis(self):
         print("analysis")
-        text = self.driver.find_elements_by_xpath("/html/body/main/div[1]/div/div[1]/section[1]/article/div[3]/div[1]")[0].text
+        text = self.driver.find_elements_by_xpath("/html/body/main/div[1]/div/div[1]/section[1]/article/div[3]/div[1]")[0].text # house description div
         if self.municipalAssessmentExist(text):
             if self.compareValueToAssessment(text) < 1:
                 self.writeIdToFile(self.driver.current_url)
@@ -89,6 +75,7 @@ class Bot():
             return True
 
     def compareValueToAssessment(self,text):
+        # Assessment
         index = text.find("Municipal Assessment") + 20 
         assessment = ""
         for i in range(0,10):
@@ -97,6 +84,7 @@ class Bot():
         assessment = assessment.strip("$")
         assessment = ''.join([i for i in assessment if  i.isdigit()])
 
+        # Asked Price
         index = text.find("Asking Price") + 13 
         price = ""
         for i in range(0,10):
