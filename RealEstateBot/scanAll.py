@@ -8,10 +8,11 @@ class Bot():
 
     def login(self):
         print("Starting")
-        self.driver.get("https://duproprio.com/en/search/list")
+        #self.driver.get("https://duproprio.com/en/search/list?search=true&regions%5B0%5D=13&regions%5B1%5D=15&regions%5B2%5D=6&regions%5B3%5D=16&max_price=1000000&is_for_sale=1&with_builders=1&parent=1&pageNumber=1&sort=-published_at")
+        self.driver.get("https://duproprio.com/en/search/list?search=true&regions%5B0%5D=13&regions%5B1%5D=15&regions%5B2%5D=6&max_price=1000000&type%5B0%5D=house&type%5B1%5D=cottage&type%5B2%5D=multiplex&type%5B3%5D=terr&type%5B4%5D=farm&subtype%5B0%5D=1&subtype%5B1%5D=2&subtype%5B2%5D=4&subtype%5B3%5D=5&subtype%5B4%5D=6&subtype%5B5%5D=7&subtype%5B6%5D=9&subtype%5B7%5D=10&subtype%5B8%5D=11&subtype%5B9%5D=13&subtype%5B10%5D=15&subtype%5B11%5D=17&subtype%5B12%5D=18&subtype%5B13%5D=19&subtype%5B14%5D=20&subtype%5B15%5D=21&subtype%5B16%5D=97&subtype%5B17%5D=98&subtype%5B18%5D=99&subtype%5B19%5D=100&subtype%5B20%5D=8&subtype%5B21%5D=40&subtype%5B22%5D=52&subtype%5B23%5D=53&subtype%5B24%5D=55&subtype%5B25%5D=56&subtype%5B26%5D=54&subtype%5B27%5D=57&subtype%5B28%5D=58&subtype%5B29%5D=59&subtype%5B30%5D=60&subtype%5B31%5D=61&subtype%5B32%5D=62&subtype%5B33%5D=93&subtype%5B34%5D=94&subtype%5B35%5D=95&subtype%5B36%5D=40&subtype%5B37%5D=103&subtype%5B38%5D=104&is_for_sale=1&with_builders=1&parent=1&pageNumber=1&sort=-published_at")
         sleep(3)
         pageNumber = 1
-       
+
         while True: 
             self.iterateTroughList()
             sleep(1)
@@ -19,7 +20,6 @@ class Bot():
             print(pageNumber)
             self.driver.find_element_by_xpath("/html/body/main/div[2]/div/div/div[3]/div/nav/div[2]/a").click() # next page button
 
-            
     def iterateTroughList(self):
         listOfHouse =  self.driver.find_elements_by_class_name("search-results-listings-list__item-image-link") # list of house div
         for i in range(len(listOfHouse)):
@@ -31,11 +31,6 @@ class Bot():
                     print("clicked")
                     sleep(3)
                     self.executeAnalysis()
-                    #if not self.visited():
-                    #    print("not visited")
-                    #    self.executeAnalysis()
-                    #else : 
-                    #    print("already visited break")
                     break
                 except:
                     print("couldnt clicked house listing")
@@ -51,17 +46,6 @@ class Bot():
             print("done")
             self.driver.back()
             sleep(3)
-
-    def visited(self):
-        url = self.driver.current_url
-        with open("list.txt") as fp:
-            lines = fp.readlines()
-            if url in lines:
-                fp.close()
-                return True
-            else :
-                fp.close()
-                return False
          
     def executeAnalysis(self):
         print("analysis")
@@ -99,6 +83,7 @@ class Bot():
         f = open("list.txt", "a")
         f.write(url + "\n")
         f.close()
+    
 
 bot = Bot()
 bot.login()
